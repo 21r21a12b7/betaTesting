@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Where is my bus</title>
+    <script>
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        window.onload = function() {
+            const cookieName = "busDetails";
+            const busDetails = getCookie(cookieName);
+            
+            if (!busDetails) {
+                // Redirect to profile.html if cookie is not present
+                window.location.href = "profile.html";
+            } else {
+                // If cookie is present, log the defaultBus to console
+                const details = JSON.parse(busDetails);
+                const defaultBus = details.busRoute;
+                window.location.href = defaultBus;
+            }
+        };
+    </script>
+</head>
+</html>

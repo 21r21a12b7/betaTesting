@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #first-div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 50px;
+            border-bottom: 1px solid #ccc;
+            position: relative;
+        }
+
+        #back-button {
+            position: absolute;
+            left: 10px;
+            height: 25px;
+            width: 25px;
+            background: no-repeat center center;
+            background-size: contain;
+            border: none;
+            cursor: pointer;
+        }
+
+        #profile-text {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #second-div {
+            padding: 10%;
+            text-align: center;
+        }
+
+        #select-bus-text {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        #bus-route-dropdown {
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        #third-div {
+            padding: 20px;
+            text-align: center;
+        }
+
+        #enter-busstop-details {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        #location-coordinates {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+
+        #location-coordinates input[type="text"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            width: 200px;
+            box-sizing: border-box;
+        }
+
+        #location-coordinates img {
+            height: 28px;
+            width: 28px;
+            cursor: pointer;
+        }
+
+        #fourth-div {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #fourth-div button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #close-button {
+            background-color: #f44336;
+            color: white;
+        }
+
+        #save-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="first-div">
+        <button id="back-button"></button>
+        <div id="profile-text">Profile</div>
+    </div>
+
+    <div id="second-div">
+        <div id="select-bus-text">Select Default Bus</div>
+        <select id="bus-route-dropdown">
+            <option value="" disabled selected>Select a route</option>
+            <option value="route1">Route 1</option>
+            <option value="route2">Route 2</option>
+            <option value="route9">Route 9</option>
+            <option value="route21">Route 21</option>
+        </select>
+    </div>
+
+    <div id="third-div">
+        <div id="enter-busstop-details">Enter BusStop Details</div>
+        <div id="location-coordinates">
+            <input type="text" id="textDisplay" value="Enter location coordinates">
+            <img src="img/myLocation.png" id="btnCurrentLocation" onclick="getCurrentLocation()" alt="Current Location">
+            <a href="#" onclick="showMap()"> <img src="img/map.png" alt="Map"></a>
+        </div>
+    </div>
+
+    <div id="fourth-div">
+        <button id="close-button">Close</button>
+        <button id="save-button" onclick="saveDetails()">Save</button>
+    </div>
+
+    <script>
+        // Define the image URL
+        const imageUrl = 'img/backArrow_street.png';
+
+        // Set the image URL to the back button
+        const backButton = document.getElementById('back-button');
+        backButton.style.backgroundImage = `url(${imageUrl})`;
+
+        // JavaScript functions for location coordinates div
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError, { enableHighAccuracy: true });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showPosition(position) {
+            const latitude = position.coords.latitude.toFixed(6);
+            const longitude = position.coords.longitude.toFixed(6);
+            document.getElementById("textDisplay").value = "[" + latitude + ", " + longitude + "]";
+        }
+
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("User denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    alert("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("An unknown error occurred.");
+                    break;
+            }
+        }
+
+        function showMap() {
+            // Display a white background
+            document.body.style.backgroundColor = 'white';
+
+            // Create an iframe element to load the map.html content
+            const iframe = document.createElement('iframe');
+            iframe.src = 'map.html';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.position = 'absolute';
+            iframe.style.top = '0';
+            iframe.style.left = '0';
+            iframe.style.zIndex = '2';
+
+            // Append the iframe to the body
+            document.body.appendChild(iframe);
+
+            // Listen for messages from the iframe
+            window.addEventListener('message', function (event) {
+                if (event.data === 'closeMap') {
+                    document.body.removeChild(iframe);
+                    document.body.style.backgroundColor = ''; // Reset background color
+                } else if (event.data) {
+                    document.getElementById('textDisplay').value = event.data;
+                    document.body.style.backgroundColor = ''; // Reset background color
+                    document.body.removeChild(iframe); // Remove the iframe
+                }
+            });
+        }
+
+        function saveDetails() {
+            const busRoute = document.getElementById('bus-route-dropdown').value;
+            const locationCoordinates = document.getElementById('textDisplay').value;
+
+            if (!busRoute || !locationCoordinates || locationCoordinates === "Enter location coordinates") {
+                alert("Please select a bus route and enter location coordinates.");
+                return;
+            }
+
+            const cookieName = "busDetails";
+            const cookieValue = JSON.stringify({ busRoute: busRoute, locationCoordinates: locationCoordinates });
+            const cookieDays = 365;
+
+            setCookie(cookieName, cookieValue, cookieDays);
+            window.location.href = busRoute;
+        }
+
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        function loadProfileDetails() {
+            const cookieName = "busDetails";
+            const busDetails = getCookie(cookieName);
+            if (busDetails) {
+                const details = JSON.parse(busDetails);
+                document.getElementById('bus-route-dropdown').value = details.busRoute;
+                document.getElementById('textDisplay').value = details.locationCoordinates;
+                console.log(details.locationCoordinates); //[17.372400, 78.437800]
+            }
+        }
+
+        window.onload = function () {
+            loadProfileDetails();
+        }
+
+        // Add event listener for the close button
+        document.getElementById('close-button').addEventListener('click', function () {
+            const busDetails = getCookie("busDetails");
+            if (!busDetails) {
+                alert("Please create profile !!");
+            } else {
+                const details = JSON.parse(busDetails);
+                window.location.href = details.busRoute;
+            }
+        });
+
+        // Add event listener for the backButton
+        document.getElementById('back-button').addEventListener('click', function () {
+            const busDetails = getCookie("busDetails");
+            if (!busDetails) {
+                alert("Please create profile !!");
+            } else {
+                const details = JSON.parse(busDetails);
+                window.location.href = details.busRoute;
+            }
+        });
+    </script>
+</body>
+
+</html>
