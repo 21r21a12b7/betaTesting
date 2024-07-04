@@ -10,20 +10,47 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
+            background-color: #fff;
+        }
+
+        #zero-div {
+            /* margin-top: 5%; */
+            display: flex;
+            margin-left: 15%;
+            margin-right: 15%;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        #walkthrough-text {
+            font-size: 16px;
+        }
+
+        #walkthrough-video {
+            background: no-repeat center center;
+            background-size: contain;
+            border: none;
+            cursor: pointer;
+            height: 28px;
+            width: 28px;
         }
 
         #first-div {
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 50px;
-            border-bottom: 1px solid #ccc;
+            height: 60px;
+            border-bottom: 1px solid #000000;
+            background-color: #fff;
+            padding: 0 20px;
             position: relative;
         }
 
         #back-button {
             position: absolute;
-            left: 10px;
+            left: 20px;
             height: 25px;
             width: 25px;
             background: no-repeat center center;
@@ -34,18 +61,22 @@
 
         #profile-text {
             text-align: center;
-            font-size: 20px;
+            font-size: 26px;
             font-weight: bold;
         }
 
         #second-div {
-            padding: 10%;
+            padding: 20px;
+            background-color: #fff;
+            border-top: 1px solid #000000;
+            /* border-bottom: 1px solid #ccc; */
             text-align: center;
         }
 
         #select-bus-text {
+            margin-top: 5%;
             font-size: 18px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         #bus-route-dropdown {
@@ -54,7 +85,10 @@
         }
 
         #third-div {
+            margin-top: 5%;
             padding: 20px;
+            background-color: #fff;
+            /* border-bottom: 1px solid #ccc; */
             text-align: center;
         }
 
@@ -67,7 +101,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
+            padding: 10px 0;
         }
 
         #location-coordinates input[type="text"] {
@@ -85,9 +119,11 @@
         }
 
         #fourth-div {
+            margin-top: 15%;
             display: flex;
             justify-content: center;
             padding: 20px;
+            background-color: #fff;
         }
 
         #fourth-div button {
@@ -108,6 +144,41 @@
             background-color: #4CAF50;
             color: white;
         }
+
+        #video-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 1);
+            /* White background */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #video-container iframe {
+            border: none;
+            width: 100%;
+            /* Adjust width as needed */
+            height: 40%;
+            /* Adjust height as needed */
+        }
+
+        #video-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 5px 10px;
+            z-index: 1001;
+        }
     </style>
 </head>
 
@@ -115,6 +186,11 @@
     <div id="first-div">
         <button id="back-button"></button>
         <div id="profile-text">Profile</div>
+    </div>
+
+    <div id="zero-div">
+        <div id="walkthrough-text">Website Walkthrough</div>
+        <button id="walkthrough-video"></button>
     </div>
 
     <div id="second-div">
@@ -142,13 +218,49 @@
         <button id="save-button" onclick="saveDetails()">Save</button>
     </div>
 
+    <div id="video-container">
+        <button id="video-close">Close</button>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/SmPa0ozY2Wk?si=DWilnMZkDIAbX9sQ"
+            title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+
     <script>
-        // Define the image URL
-        const imageUrl = 'img/backArrow_street.png';
+        // Define the image URL for the walkthrough video button
+        const walkthroughVideoUrl = 'img/youtubeVideo.png';
+
+        // Set the image URL to the walkthrough video button
+        const walkthroughVideoButton = document.getElementById('walkthrough-video');
+        walkthroughVideoButton.style.backgroundImage = `url(${walkthroughVideoUrl})`;
+
+        document.getElementById('walkthrough-video').addEventListener('click', function () {
+            document.body.style.backgroundColor = 'white';  // Change background color to white
+            document.getElementById('video-container').style.display = 'flex';
+        });
+
+        document.getElementById('video-close').addEventListener('click', function () {
+            // Get the iframe element containing the video
+            let iframe = document.querySelector('#video-container iframe');
+
+            // Pause the video and reset the source
+            let videoSrc = iframe.src;
+            iframe.src = videoSrc; // This resets the video and stops it
+
+            // Hide the video container
+            document.getElementById('video-container').style.display = 'none';
+
+            // Reset the background color of the body
+            document.body.style.backgroundColor = '';
+        });
+
+
+        // Define the image URL for the back button
+        const backButtonImageUrl = 'img/backArrow_street.png';
 
         // Set the image URL to the back button
         const backButton = document.getElementById('back-button');
-        backButton.style.backgroundImage = `url(${imageUrl})`;
+        backButton.style.backgroundImage = `url(${backButtonImageUrl})`;
 
         // JavaScript functions for location coordinates div
         function getCurrentLocation() {
@@ -250,39 +362,16 @@
         function loadProfileDetails() {
             const cookieName = "busDetails";
             const busDetails = getCookie(cookieName);
+
             if (busDetails) {
-                const details = JSON.parse(busDetails);
-                document.getElementById('bus-route-dropdown').value = details.busRoute;
-                document.getElementById('textDisplay').value = details.locationCoordinates;
-                console.log(details.locationCoordinates); //[17.372400, 78.437800]
+                const { busRoute, locationCoordinates } = JSON.parse(busDetails);
+                document.getElementById('bus-route-dropdown').value = busRoute;
+                document.getElementById('textDisplay').value = locationCoordinates;
             }
         }
 
-        window.onload = function () {
-            loadProfileDetails();
-        }
-
-        // Add event listener for the close button
-        document.getElementById('close-button').addEventListener('click', function () {
-            const busDetails = getCookie("busDetails");
-            if (!busDetails) {
-                alert("Please create profile !!");
-            } else {
-                const details = JSON.parse(busDetails);
-                window.location.href = details.busRoute;
-            }
-        });
-
-        // Add event listener for the backButton
-        document.getElementById('back-button').addEventListener('click', function () {
-            const busDetails = getCookie("busDetails");
-            if (!busDetails) {
-                alert("Please create profile !!");
-            } else {
-                const details = JSON.parse(busDetails);
-                window.location.href = details.busRoute;
-            }
-        });
+        // Call loadProfileDetails when the page loads
+        window.onload = loadProfileDetails;
     </script>
 </body>
 
