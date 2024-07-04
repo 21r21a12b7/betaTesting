@@ -22,7 +22,7 @@
             align-items: center;
             padding: 15px;
             background-color: #fff;
-            
+
         }
 
         #walkthrough-text {
@@ -375,6 +375,28 @@
 
         // Call loadProfileDetails when the page loads
         window.onload = loadProfileDetails;
+
+        // Add event listener for the close button
+        document.getElementById('close-button').addEventListener('click', function () {
+            const busDetails = getCookie("busDetails");
+            if (!busDetails) {
+                alert("Please create profile !!");
+            } else {
+                const details = JSON.parse(busDetails);
+                window.location.href = details.busRoute;
+            }
+        });
+
+        // Add event listener for the close button
+        document.getElementById('back-button').addEventListener('click', function () {
+            const busDetails = getCookie("busDetails");
+            if (!busDetails) {
+                alert("Please create profile !!");
+            } else {
+                const details = JSON.parse(busDetails);
+                window.location.href = details.busRoute;
+            }
+        });
     </script>
 </body>
 
