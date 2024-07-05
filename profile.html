@@ -38,6 +38,31 @@
             width: 28px;
         }
 
+        #fifth-div {
+            margin-top: 5%;
+            display: flex;
+            margin-left: 20%;
+            margin-right: 20%;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #fff;
+
+        }
+
+        #query-text {
+            font-size: 16px;
+        }
+
+        #mail-image {
+            background: no-repeat center center;
+            background-size: contain;
+            border: none;
+            cursor: pointer;
+            height: 28px;
+            width: 28px;
+        }
+
         #first-div {
             display: flex;
             align-items: center;
@@ -221,6 +246,11 @@
         <button id="save-button" onclick="saveDetails()">Save</button>
     </div>
 
+    <div id="fifth-div">
+        <div id="query-text"> Any Inquiry/Feedback ? </div>
+        <button id="mail-image"></button>
+    </div>
+
     <div id="video-container">
         <button id="video-close">Close</button>
         <iframe width="560" height="315" src="https://www.youtube.com/embed/SmPa0ozY2Wk?si=DWilnMZkDIAbX9sQ"
@@ -241,6 +271,31 @@
             document.body.style.backgroundColor = 'white';  // Change background color to white
             document.getElementById('video-container').style.display = 'flex';
         });
+
+        // Define the image URL for the mail button
+        const mailUrl = 'img/mail.png';
+
+        // Set the image URL to the mail button
+        const mailButton = document.getElementById('mail-image');
+        mailButton.style.backgroundImage = `url(${mailUrl})`;
+
+        document.getElementById('mail-image').addEventListener('click', function () {
+            // Email address
+            const emailAddress = 'mlrit.whereismybus@gmail.com';
+
+            // Subject of the email (optional)
+            const subject = encodeURIComponent('Feedback or Inquiry');
+
+            // Body of the email (optional)
+            const body = encodeURIComponent('Write your message here.');
+
+            // Construct the mailto link
+            const mailtoLink = `mailto:${emailAddress}?subject=${subject}&body=${body}`;
+
+            // Open the default email client
+            window.open(mailtoLink);
+        });
+
 
         document.getElementById('video-close').addEventListener('click', function () {
             // Get the iframe element containing the video
