@@ -347,21 +347,21 @@
         //     alert("No student details found.");
         // }
 
-        // window.onload = function () {
-        const loginDoneCookie = getCookie("loginDone");
-        if (!loginDoneCookie) {
-            window.location.href = "../index.html";
+        const cookieName = "busDetails";
+        const busDetails = getCookie(cookieName);
+        if (busDetails) {
+            const details = JSON.parse(busDetails);
+            const locationCoordinates = details.locationCoordinates;
+            studentStopLocation = parseCoordinates(locationCoordinates);
         } else {
-            const busDetailsCookie = getCookie("busDetails");
-            if (!busDetailsCookie) {
-                window.location.href = "../profile.html";
+            const cookieName2 = "loginDone";
+            const loginDetails = getCookie(cookieName2);
+            if (!loginDetails) {
+                window.location.href = "../index.html";
             } else {
-                const details = JSON.parse(busDetails);
-                const locationCoordinates = details.locationCoordinates;
-                studentStopLocation = parseCoordinates(locationCoordinates);
+                window.location.href = "../profile.html";
             }
         }
-        // };
 
 
 
