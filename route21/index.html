@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Route 21</title>
+    <title>Route 1</title>
     <style>
         body, html {
             margin: 0;
@@ -42,6 +42,29 @@
     </div>
     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
     <script>
+        window.onload = function() {
+            const loginDoneCookie = getCookie("loginDone");
+            if (!loginDoneCookie) {
+                window.location.href = "../index.html";
+            } else {
+                const busDetailsCookie = getCookie("busDetails");
+                if (!busDetailsCookie) {
+                    window.location.href = "../profile.html";
+                }
+            }
+        };
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
         const lottiePlayer = document.getElementById('lottie-player');
 
         lottiePlayer.addEventListener('complete', function() {

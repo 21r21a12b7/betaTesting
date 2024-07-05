@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,20 +17,88 @@
             return null;
         }
 
-        window.onload = function() {
-            const cookieName = "busDetails";
-            const busDetails = getCookie(cookieName);
-            
-            if (!busDetails) {
-                // Redirect to profile.html if cookie is not present
+        function setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+        }
+
+        function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            if (username === "Mlrit@2005" && password === "Mlrit@2005") {
+                // Set loginDone cookie valid for 365 days
+                setCookie("loginDone", "true", 365); // Expires in 365 days
+
+                // Redirect to profile.html
                 window.location.href = "profile.html";
             } else {
-                // If cookie is present, log the defaultBus to console
-                const details = JSON.parse(busDetails);
-                const defaultBus = details.busRoute;
-                window.location.href = defaultBus;
+                alert("Invalid username or password!");
             }
+        }
+
+        window.onload = function () {
+            // const cookieName = "busDetails";
+            // const busDetails = getCookie(cookieName);
+
+            // if (!busDetails) {
+            //     // Show login form if cookie is not present
+            //     document.getElementById("login-form").style.display = "block";
+            // } else {
+            //     // If cookie is present, log the defaultBus to console and redirect
+            //     const details = JSON.parse(busDetails);
+            //     const defaultBus = details.busRoute;
+            //     window.location.href = defaultBus;
+            // }
+
+            const cookieName = "loginDone";
+            const loginDetails = getCookie(cookieName);
+
+            if (!loginDetails) {
+                document.getElementById("login-form").style.display = "block";
+            } else {
+                const cookieName2 = "busDetails";
+                const busDetails = getCookie(cookieName2);
+                if (!busDetails) {
+                    window.location.href = "profile.html";
+                } else {
+                    // If cookie is present, log the defaultBus to console and redirect
+                    const details = JSON.parse(busDetails);
+                    const defaultBus = details.busRoute;
+                    window.location.href = defaultBus;
+                }
+            }
+
         };
     </script>
+    <style>
+        #login-form {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            background-color: #fff;
+        }
+    </style>
 </head>
+
+<body>
+    <div id="login-form">
+        <h2>Login</h2>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br><br>
+        <button onclick="login()">Login</button>
+    </div>
+</body>
+
 </html>

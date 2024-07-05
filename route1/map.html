@@ -320,7 +320,7 @@
         let presentBusLocation = [0, 0];
         var studentStopLocation;
 
-        
+
         function getCookie(name) {
             const nameEQ = name + "=";
             const ca = document.cookie.split(';');
@@ -336,15 +336,34 @@
             return coordinates.replace("[", "").replace("]", "").split(",").map(coord => parseFloat(coord.trim()));
         }
 
-        const cookieName = "busDetails";
-        const busDetails = getCookie(cookieName);
-        if (busDetails) {
-            const details = JSON.parse(busDetails);
-            const locationCoordinates = details.locationCoordinates;
-            studentStopLocation = parseCoordinates(locationCoordinates);
+        // const cookieName = "busDetails";
+        // const busDetails = getCookie(cookieName);
+        // if (busDetails) {
+        //     const details = JSON.parse(busDetails);
+        //     const locationCoordinates = details.locationCoordinates;
+        //     studentStopLocation = parseCoordinates(locationCoordinates);
+        // }
+        // else {
+        //     alert("No student details found.");
+        // }
+
+        // window.onload = function () {
+        const loginDoneCookie = getCookie("loginDone");
+        if (!loginDoneCookie) {
+            window.location.href = "../index.html";
         } else {
-            alert("No student details found.");
+            const busDetailsCookie = getCookie("busDetails");
+            if (!busDetailsCookie) {
+                window.location.href = "../profile.html";
+            } else {
+                const details = JSON.parse(busDetails);
+                const locationCoordinates = details.locationCoordinates;
+                studentStopLocation = parseCoordinates(locationCoordinates);
+            }
         }
+        // };
+
+
 
         // // Retrieve stop location from cookie and assign it to the variable
         // if (istTime >= 2 && istTime <= 14) {
@@ -384,7 +403,7 @@
                     let timeHr = 0;
 
                     // if (speed != 0) {
-                        timeHr = distanceKm / 20;
+                    timeHr = distanceKm / 20;
                     // }
                     console.log(summary.totalTime / 60);
 
@@ -398,13 +417,13 @@
                     }
 
                     // if (speed != 0) {
-                        if (timeHr < 1) {
-                            time = (timeHr * 60).toFixed(0) + 'min';
-                        } else {
-                            const hours = Math.floor(timeHr);
-                            const minutes = ((timeHr - hours) * 60).toFixed(0);
-                            time = `${hours}hr ${minutes}min`;
-                        }
+                    if (timeHr < 1) {
+                        time = (timeHr * 60).toFixed(0) + 'min';
+                    } else {
+                        const hours = Math.floor(timeHr);
+                        const minutes = ((timeHr - hours) * 60).toFixed(0);
+                        time = `${hours}hr ${minutes}min`;
+                    }
                     // } else {
                     //     time = 'Stationary';
                     // }
@@ -473,14 +492,14 @@
                             animate: true,
                         });
                     }
-                    const speedd = Math.round(data[0].speed*(1.852));
+                    const speedd = Math.round(data[0].speed * (1.852));
                     const result = await calculateDistanceTimeSpeed(presentBusLocation, toLocation, data[0].speed);
                     document.getElementById('distance').textContent = result.distance;
                     document.getElementById('time').textContent = result.time;
                     document.getElementById('speed').textContent = `${speedd}kmph`;
                 } else {
                     if (shouldCalculateRoute === true) {
-                        const speedd = Math.round(data[0].speed*(1.852));
+                        const speedd = Math.round(data[0].speed * (1.852));
                         const result = await calculateDistanceTimeSpeed(presentBusLocation, toLocation, data[0].speed);
                         document.getElementById('distance').textContent = result.distance;
                         document.getElementById('time').textContent = result.time;
@@ -697,6 +716,7 @@
 
         fetchBusLocation();
         setInterval(fetchBusLocation, 10000);
+
 
     </script>
 </body>

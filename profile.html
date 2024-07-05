@@ -363,14 +363,22 @@
         }
 
         function loadProfileDetails() {
-            const cookieName = "busDetails";
-            const busDetails = getCookie(cookieName);
+            const cookieName2 = "loginDone";
+            const loginDetails = getCookie(cookieName2);
 
-            if (busDetails) {
-                const { busRoute, locationCoordinates } = JSON.parse(busDetails);
-                document.getElementById('bus-route-dropdown').value = busRoute;
-                document.getElementById('textDisplay').value = locationCoordinates;
+            if (!loginDetails) {
+                window.location.href = "index.html";
+            } else {
+                const cookieName = "busDetails";
+                const busDetails = getCookie(cookieName);
+
+                if (busDetails) {
+                    const { busRoute, locationCoordinates } = JSON.parse(busDetails);
+                    document.getElementById('bus-route-dropdown').value = busRoute;
+                    document.getElementById('textDisplay').value = locationCoordinates;
+                }
             }
+
         }
 
         // Call loadProfileDetails when the page loads
