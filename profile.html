@@ -455,8 +455,7 @@
             if (!busDetails) {
                 alert("Please create profile !!");
             } else {
-                const details = JSON.parse(busDetails);
-                window.location.href = details.busRoute;
+                window.history.back(); // If busRoute is not defined, go back in history
             }
         });
     </script>
