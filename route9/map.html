@@ -34,10 +34,6 @@
             padding: 5px;
         }
 
-        .logo-menu img {
-            cursor: pointer;
-        }
-
         .logo-menu img.logo {
             width: 34px;
             height: 35px;
@@ -87,10 +83,6 @@
             margin-right: 5px;
         }
 
-        .refresh-button {
-            cursor: pointer;
-        }
-
         .map-section {
             flex: 1;
             display: flex;
@@ -111,7 +103,7 @@
             /* color: white; */
             padding: 0 0;
             border-radius: 5px;
-            cursor: pointer;
+            /* cursor: pointer; */
             transition: background-color 0.3s;
             /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); */
             width: 50px;
@@ -140,7 +132,7 @@
             border: 1px solid black;
             border-radius: 50%;
             padding: 10px;
-            cursor: pointer;
+            /* cursor: pointer; */
             z-index: 1000;
         }
 
@@ -154,7 +146,7 @@
             color: white;
             padding: 6px 18px;
             border-radius: 8px 0 0 8px;
-            cursor: pointer;
+            /* cursor: pointer; */
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
@@ -194,7 +186,7 @@
 
         .slider {
             position: absolute;
-            cursor: pointer;
+            /* cursor: pointer; */
             top: 0;
             left: 0;
             right: 0;
@@ -245,7 +237,7 @@
         <div class="logo-menu">
             <img class="logo" src="../img/logo.svg" alt="Logo" onclick="redirectToIndex();">
             <img class="change" src="../img/change_route_9.svg" alt="Change" onclick="redirectToChange();">
-            <img class="settings" src="../img/profile.png" alt="Settings" onclick="redirectToSettings();">
+            <img class="settings" src="../img/profile.svg" alt="Settings" onclick="redirectToSettings();">
         </div>
         <div class="update-from-to">
             <span id="routeText">To BusStop</span>
@@ -279,7 +271,7 @@
                     document.write(`
                     <div class="floating-button" id="isInBus">
                         <div class="button-content">
-                            <span id="buttonText"><img src="../img/left.png" alt="Left Arrow" width="15" height="15"></span>
+                            <span id="buttonText"><img src="../img/left.svg" alt="Left Arrow" width="15" height="15"></span>
                             <div class="toggle-content" id="toggleContent">
                                 <span>In Bus?</span>
                                 <label class="switch">
@@ -687,11 +679,11 @@
                 isInBusButton.addEventListener("click", function () {
                     if (isInBusButton.classList.contains("expanded")) {
                         isInBusButton.classList.remove("expanded");
-                        buttonText.innerHTML = "<img src='../img/left.png' alt='Left Arrow' width='15' height='15'>"; // Left arrow image
+                        buttonText.innerHTML = "<img src='../img/left.svg' alt='Left Arrow' width='15' height='15'>"; // Left arrow image
                         toggleContent.style.display = "none";
                     } else {
                         isInBusButton.classList.add("expanded");
-                        buttonText.innerHTML = "<img src='../img/right.png' alt='Right Arrow' width='15' height='15'>"; // Right arrow image
+                        buttonText.innerHTML = "<img src='../img/right.svg' alt='Right Arrow' width='15' height='15'>"; // Right arrow image
                         toggleContent.style.display = "flex";
                     }
                 });
